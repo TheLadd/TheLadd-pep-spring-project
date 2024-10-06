@@ -11,6 +11,7 @@ import com.example.repository.AccountRepository;
 import com.example.repository.MessageRepository;
 
 import java.util.Optional;
+import java.util.List;
 
 @Service
 public class MessageService {
@@ -37,5 +38,9 @@ public class MessageService {
         }
 
         return messageRepository.save(msg);
+    }
+
+    public List<Message> getAllMessages() {
+        return (List<Message>) messageRepository.findAll();
     }
 }

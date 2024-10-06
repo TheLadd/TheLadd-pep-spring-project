@@ -40,16 +40,14 @@ public class SocialMediaController {
         return accountService.accountExists(acc);
     }
 
-    // TODO
     @PostMapping(value = "/messages")
     public Message createMessage(@RequestBody Message msg) {
         return messageService.createMessage(msg);
     }
 
-    // TODO
     @GetMapping(value = "/messages")
     public List<Message> getAllMessages() {
-        return null;
+        return messageService.getAllMessages();
     }
 
 }
