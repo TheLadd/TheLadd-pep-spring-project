@@ -2,8 +2,12 @@ package com.example.controller;
 
 import com.example.entity.Account;
 import com.example.entity.Message;
+import com.example.service.*;
+import com.example.exception.*;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 /**
@@ -14,11 +18,30 @@ import java.util.List;
  */
 @RestController
 public class SocialMediaController {
+    private AccountService accountService;
+    private MessageService messageService;
+
+    @Autowired
+    public SocialMediaController(AccountService accountService, MessageService messageService) {
+        this.accountService = accountService;
+        this.messageService = messageService;
+    }
 
     // TODO
-    @PostMapping(value = "/register", params = {"username", "password"})
-    public Account registerUser(@RequestBody Account acc) {
-        return null;
+    @PostMapping(value = "register", params = {"username", "password"})
+    public Account registerUser(@RequestBody Account acc, @RequestParam String username, @RequestParam String password) {
+        try {
+            return accountService.registerAccount(acc);
+        }
+        catch (InvalidUsernameException e) {
+            e.printStackTrace();
+            // TODO return empty response w/ status code: 400
+        }
+        catch(UsernameAlreadyExistsException e) {
+            e.printStackTrace();
+            // TODO return empty response w/ status code: 409
+        }
+        return acc;
     } 
 
     // TODO
