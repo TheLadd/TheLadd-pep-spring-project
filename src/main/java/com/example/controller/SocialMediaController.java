@@ -43,7 +43,7 @@ public class SocialMediaController {
     // TODO
     @PostMapping(value = "/messages")
     public Message createMessage(@RequestBody Message msg) {
-        return null;
+        return messageService.createMessage(msg);
     }
 
     // TODO
