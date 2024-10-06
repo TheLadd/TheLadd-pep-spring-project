@@ -5,7 +5,8 @@ import org.springframework.stereotype.Service;
 
 import com.example.entity.Account;
 import com.example.entity.Message;
-import com.example.exception.InvalidMessageBodyException;
+import com.example.exception.InvalidMessageException;
+import com.example.exception.MessageDoesNotExistException;
 import com.example.exception.UserDoesNotExistException;
 import com.example.repository.AccountRepository;
 import com.example.repository.MessageRepository;
@@ -24,12 +25,15 @@ public class MessageService {
         this.accountRepository = accountRepository;
     }
 
-    public Message createMessage(Message msg) throws InvalidMessageBodyException, UserDoesNotExistException {
-        // Validate input (message_text)
-        String txt = msg.getMessageText();
-        if (txt.length() <= 0 || txt.length() >= 255) {
-            throw new InvalidMessageBodyException();
+    private void assertMessageBodyIsValid(String txt) throws InvalidMessageException {
+        if (txt.length() == 0 || txt.length() >= 255) {
+            throw new InvalidMessageException();
         }
+    }
+
+    public Message createMessage(Message msg) throws InvalidMessageException, UserDoesNotExistException {
+        // Validate input (message_text)
+        assertMessageBodyIsValid(msg.getMessageText());
 
         // Ensure posted_by refers to a real user
         Optional<Account> optionalAccount = accountRepository.findById(msg.getPostedBy());
@@ -60,5 +64,22 @@ public class MessageService {
 
         messageRepository.deleteById(message_id);
         return 1;   // This feels hacky. Any better way? (CrudRepository.deleteById is silent upon missing entry)
+    }
+
+    public Integer updateMessageById(Integer message_id, String message_text) throws InvalidMessageException, MessageDoesNotExistException {
+        // Validate message_text
+        assertMessageBodyIsValid(message_text);
+
+        // Ensure that the message-to-be-updated exists
+        Optional<Message> optionalMessage = messageRepository.findById(message_id);
+        if (optionalMessage.isEmpty()) {
+            throw new MessageDoesNotExistException();
+        }
+
+        // Update and return message
+        Message updatedMessage = optionalMessage.get();
+        updatedMessage.setMessageText(message_text);
+        messageRepository.save(updatedMessage);
+        return 1;
     }
 }

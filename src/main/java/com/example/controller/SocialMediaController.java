@@ -62,4 +62,9 @@ public class SocialMediaController {
         return messageService.deleteMessageById(message_id);
     }
 
+    @PatchMapping(value = "/messages/{message_id}")
+    public Integer updateMessageById(@PathVariable Integer message_id, @RequestBody Message msg) {    
+        // NOTE: @Param msg not guaranteed to have any value other than message_text 
+        return messageService.updateMessageById(message_id, msg.getMessageText());
+    }
 }
