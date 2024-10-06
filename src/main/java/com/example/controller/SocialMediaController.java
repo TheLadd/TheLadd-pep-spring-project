@@ -27,27 +27,17 @@ public class SocialMediaController {
         this.messageService = messageService;
     }
 
-    // TODO
-    @PostMapping(value = "register", params = {"username", "password"})
-    public Account registerUser(@RequestBody Account acc, @RequestParam String username, @RequestParam String password) {
-        try {
-            return accountService.registerAccount(acc);
-        }
-        catch (InvalidUsernameException e) {
-            e.printStackTrace();
-            // TODO return empty response w/ status code: 400
-        }
-        catch(UsernameAlreadyExistsException e) {
-            e.printStackTrace();
-            // TODO return empty response w/ status code: 409
-        }
-        return acc;
-    } 
+    // NOTE:    Methods below throw custom exceptions on invalid inputs. Custom exceptions
+    //          have been annotated w/ @ResponseStatus to set the status code accordingly
 
-    // TODO
-    @PostMapping(value = "/login", params = {"username", "password"})
+    @PostMapping(value = "/register")
+    public Account registerUser(@RequestBody Account acc) {
+        return accountService.registerAccount(acc);
+    }
+
+    @PostMapping(value = "/login")
     public Account loginUser(@RequestBody Account acc) {
-        return null;
+        return accountService.accountExists(acc);
     }
 
     // TODO

@@ -1,7 +1,7 @@
 package com.example.exception;
 
-public class InvalidUsernameException extends RuntimeException {
-    // public InvalidUsernameException(String errMsg, Throwable err) {
-    //     super(errMsg, err);
-    // }
-}
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.http.HttpStatus;
+
+@ResponseStatus(code = HttpStatus.BAD_REQUEST)
+public class InvalidUsernameException extends RuntimeException {}

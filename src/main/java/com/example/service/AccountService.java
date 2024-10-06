@@ -2,8 +2,7 @@ package com.example.service;
 
 import com.example.entity.Account;
 import com.example.repository.AccountRepository;
-import com.example.exception.InvalidUsernameException;
-import com.example.exception.UsernameAlreadyExistsException;
+import com.example.exception.*;
 
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +35,11 @@ public class AccountService {
         return accountRepository.save(acc);
     }
 
-    // TODO
-    public Account accountExists(Account acc) {
-        return null;
+    public Account accountExists(Account acc) throws UnsuccessfulLoginException {
+        Optional<Account> optionalAccount = accountRepository.findByUsername(acc.getUsername());
+        if (optionalAccount.isEmpty() || !optionalAccount.get().getPassword().equals(acc.getPassword())) {
+            throw new UnsuccessfulLoginException();
+        }
+        return optionalAccount.get();
     }
 }
