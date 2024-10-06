@@ -41,7 +41,6 @@ public class MessageService {
     }
 
     public List<Message> getAllMessages() {
-        // return (List<Message>) messageRepository.findAll();
         return messageRepository.findAll();
     }
 
@@ -51,5 +50,15 @@ public class MessageService {
             return null;
         }
         return optionalMessage.get();
+    }
+
+    public Integer deleteMessageById(Integer message_id) {
+        Optional<Message> optionalMessage = messageRepository.findById(message_id);
+        if (optionalMessage.isEmpty()) {
+            return null;
+        }
+
+        messageRepository.deleteById(message_id);
+        return 1;   // This feels hacky. Any better way? (CrudRepository.deleteById is silent upon missing entry)
     }
 }

@@ -57,4 +57,9 @@ public class SocialMediaController {
         return messageService.getMessageById(message_id);
     }
 
+    @DeleteMapping(value = "/messages/{message_id}")
+    public Integer deleteMessageById(@PathVariable Integer message_id) {
+        return messageService.deleteMessageById(message_id);
+    }
+
 }
