@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import java.util.List;
+import java.util.ArrayList;
 
 import javax.websocket.server.PathParam;
 
@@ -66,5 +67,10 @@ public class SocialMediaController {
     public Integer updateMessageById(@PathVariable Integer message_id, @RequestBody Message msg) {    
         // NOTE: @Param msg not guaranteed to have any value other than message_text 
         return messageService.updateMessageById(message_id, msg.getMessageText());
+    }
+
+    @GetMapping(value = "/accounts/{account_id}/messages")
+    public List<Message> getAllMessagesFromUserById(@PathVariable Integer account_id) {
+        return messageService.getAllMessagesFromUserById(account_id);
     }
 }
