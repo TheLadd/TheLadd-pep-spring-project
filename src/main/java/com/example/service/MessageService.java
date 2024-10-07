@@ -83,7 +83,7 @@ public class MessageService {
         return 1;
     }
 
-    public List<Message> getAllMessagesFromUserById(Integer account_id) {
+    public List<Message> getAllMessagesFromAccountById(Integer account_id) {
         return messageRepository.findByPostedBy(account_id);
     }
 }
